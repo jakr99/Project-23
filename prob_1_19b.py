@@ -1,16 +1,17 @@
 from automata.fa.nfa import NFA
 
 prob_1_19b = NFA(
-    states={'q0', 'q1', 'q2', 'q3', 'q4', 'q5'},
+    states={'q_start', 'q0', 'q00', 'q00_1', 'q0011', 'q01', 'q_accept'},
     input_symbols={'0', '1'},
     transitions={
-        'q0': {'0': {'q1', 'q5'}, '': {'q0'}},
-        'q1': {'0': {'q2', 'q3'}},
-        'q2': {'1': {'q0'}},  # This accounts for the (00)* part
-        'q3': {'1': {'q4'}},  # This is the start of the (11) part
-        'q4': {'': {'q0'}},   # This transition completes the (00)*(11) and loops back for repetition
-        'q5': {'1': {'q0'}}   # This accounts for the 01 part
+        'q_start': {'': {'q0', 'q_accept'}},  # Start state, can go to q0 or accept on epsilon
+        'q0': {'0': {'q00', 'q01'}, '1': {'q_accept'}},  # Transition to handle "0" or "01"
+        'q00': {'1': {'q00_1'}, '0': {'q00'}},  # Stay on q00 on "0", move to q00_1 on "1"
+        'q00_1': {'1': {'q0011'}},  # Transition for "00" followed by "11"
+        'q0011': {'': {'q_accept'}},  # Transition back to accept on epsilon
+        'q01': {'': {'q_accept'}},  # Transition back to accept on epsilon for "01"
+        'q_accept': {'': {'q0'}}  # Transition on epsilon back to q0 to allow repetition
     },
-    initial_state='q0',
-    final_states={'q0'}
+    initial_state='q_start',
+    final_states={'q_accept'}  # Accepting state
 )
