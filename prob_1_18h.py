@@ -1,4 +1,5 @@
 from automata.fa.nfa import NFA
+import re
 
-prob_1_18h = "(1|0(0|10|110|1110|1111)(01)*)?"
+prob_1_18h = "^(?!.*(?:11|111)).*$"
 
